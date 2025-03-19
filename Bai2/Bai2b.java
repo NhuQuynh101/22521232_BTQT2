@@ -1,6 +1,5 @@
 package Bai2;
 import java.util.Scanner;
-
 public class Bai2b {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -12,25 +11,37 @@ public class Bai2b {
             input = sc.nextLine();
         }
 
-        int sum = 0;
-        StringBuilder numberBuffer = new StringBuilder();
+        char secondMostFrequent = findSecondMostFrequentChar(input);
+        System.out.println("Ky tu co so lan xuat hien nhieu thu 2 trong chuoi la: " + secondMostFrequent);
+        sc.close();
+    }
 
+    public static char findSecondMostFrequentChar(String input) {
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException("Chuoi rong");
+        }
+
+        int[] charCount = new int[256];
         for (char c : input.toCharArray()) {
-            if (Character.isDigit(c)) {
-                numberBuffer.append(c);
-            } else {
-                if (numberBuffer.length() > 0) {
-                    sum += Integer.parseInt(numberBuffer.toString());
-                    numberBuffer.setLength(0);
-                }
+            charCount[c]++;
+        }
+
+        int firstMax = 0, secondMax = 0;
+        for (int count : charCount) {
+            if (count > firstMax) { 
+                secondMax = firstMax;
+                firstMax = count;
+            } else if (count > secondMax && count != firstMax) {
+                secondMax = count;
             }
         }
 
-        if (numberBuffer.length() > 0) {
-            sum += Integer.parseInt(numberBuffer.toString());
+        for (char c : input.toCharArray()) {
+            if (charCount[c] == secondMax) {
+                return c;
+            }
         }
 
-        System.out.println("Tong cac so trong chuoi la: " + sum);
-        sc.close();
+        return '\0';
     }
 }
